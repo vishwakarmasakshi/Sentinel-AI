@@ -1,0 +1,12 @@
+
+streamlit
+pandas
+numpy
+requests
+sentence-transformers
+faiss-cpu
+ollama
+rank-bm25
+scikit-learn
+ijson
+python-dotenv

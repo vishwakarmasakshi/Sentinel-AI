@@ -1,0 +1,28 @@
+
+# Virtual environment
+venv/
+.venv/
+
+# Environment variables and API keys
+.env
+.env.*
+!.env.example
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Backup files
+app_backup.py
+backup/
+
+# Logs
+*.log 
+
+# Large generated files
+embeddings/
+venv/
+data/
