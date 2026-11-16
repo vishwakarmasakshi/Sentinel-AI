@@ -1,42 +1,53 @@
 # 🛡️ Sentinel AI
-### Intelligent Common Vulnerabilities and Exposures (CVE) Analyzer
+## Intelligent CVE Vulnerability Analyzer
 
 Sentinel AI is an AI-powered cybersecurity application designed to help users search, explore, and understand Common Vulnerabilities and Exposures (CVEs).
 
-It uses Retrieval-Augmented Generation (RAG), semantic search, and hybrid retrieval to find relevant vulnerability information from a large CVE dataset and generate context-based explanations.
+The application uses **Retrieval-Augmented Generation (RAG)** and a hybrid information retrieval system combining semantic search and keyword-based search. It retrieves relevant vulnerability records and uses Llama 3.2 to generate context-aware explanations.
+
+---
 
 ## 🚀 Key Features
 
 ### 1. CVE Dashboard
 - Displays the total number of CVE records.
 - Shows vulnerability distribution by severity.
-- Displays recently published vulnerabilities.
+- Provides an overview of the vulnerability dataset.
 
 ### 2. AI Vulnerability Analyzer
 - Accepts natural-language cybersecurity questions.
-- Retrieves relevant CVE records.
-- Generates explanations using Llama 3.2.
-- Provides vulnerability details and security recommendations.
+- Retrieves relevant CVE information.
+- Generates context-based explanations using Llama 3.2.
+- Provides relevant vulnerability details and security recommendations.
 
-### 3. Hybrid Search
-Combines multiple retrieval techniques:
-- **FAISS:** Semantic similarity search.
-- **BM25:** Keyword-based retrieval.
-- **Reciprocal Rank Fusion (RRF):** Combines results from both retrieval methods.
+### 3. Hybrid Retrieval System
+
+Sentinel AI combines multiple retrieval techniques to improve search relevance.
+
+- **FAISS:** Performs semantic similarity search using vector embeddings.
+- **BM25:** Performs keyword-based information retrieval.
+- **Reciprocal Rank Fusion (RRF):** Combines the rankings from FAISS and BM25 to produce a unified result list.
 
 ### 4. CVE Explorer
-Allows users to explore and filter vulnerabilities using:
+Allows users to explore and filter vulnerability records using:
 - Severity
 - Publication year
 - Minimum CVSS score
 - Product name
-- CVE ID or description
+- CVE ID and description
 
 ### 5. Exact CVE Lookup
-Users can search for a specific CVE ID to retrieve its vulnerability information.
+Users can enter a specific CVE ID to retrieve its vulnerability information from the dataset.
 
-### 6. NVD Data Updates
-Includes scripts to fetch recent CVE information from the National Vulnerability Database (NVD) and process new records.
+### 6. Automated CVE Data Updates
+The project includes scripts for:
+- Fetching recent CVE records from the NVD API.
+- Identifying duplicate records.
+- Processing and enriching vulnerability metadata.
+- Generating embeddings for new records.
+- Integrating new records into the existing dataset and indexes.
+
+---
 
 ## 🧠 Technologies Used
 
@@ -44,40 +55,44 @@ Includes scripts to fetch recent CVE information from the National Vulnerability
 |---|---|
 | Python | Main programming language |
 | Streamlit | Web application interface |
-| Sentence Transformers | Text embeddings |
-| all-MiniLM-L6-v2 | Semantic embedding model |
+| Sentence Transformers | Text embedding generation |
+| all-MiniLM-L6-v2 | Embedding model |
 | FAISS | Vector similarity search |
 | BM25 | Keyword-based retrieval |
-| RRF | Hybrid result ranking |
+| Reciprocal Rank Fusion | Hybrid ranking |
 | Llama 3.2 | Natural-language answer generation |
-| NVD | CVE vulnerability data |
-| Pandas & NumPy | Data processing |
+| Ollama | Local language model runtime |
+| NVD API | CVE data collection |
+| Pandas | Data processing |
+| NumPy | Numerical operations |
 
-## 🏗️ Project Architecture
+---
 
-1. Collect CVE records from NVD.
-2. Preprocess and structure vulnerability data.
-3. Generate text embeddings using MiniLM.
-4. Store and search embeddings using FAISS.
-5. Build a BM25 keyword search index.
-6. Combine retrieval results using RRF.
-7. Pass relevant CVE context to the language model.
-8. Display vulnerability explanations through Streamlit.
+## 🏗️ System Architecture
+
+The application follows a Retrieval-Augmented Generation workflow.
+
+1. **Data Collection:** CVE records are collected from the National Vulnerability Database (NVD).
+2. **Preprocessing:** Vulnerability descriptions and metadata are processed and structured.
+3. **Embedding Generation:** The all-MiniLM-L6-v2 model converts CVE descriptions into numerical vectors.
+4. **Vector Retrieval:** FAISS retrieves semantically similar vulnerability records.
+5. **Keyword Retrieval:** BM25 retrieves records based on keyword relevance.
+6. **Hybrid Ranking:** Reciprocal Rank Fusion combines both retrieval result lists.
+7. **Context Preparation:** Relevant CVE records are selected as context.
+8. **Answer Generation:** Llama 3.2 generates an explanation using the retrieved context.
+9. **User Interface:** Streamlit displays the results through an interactive dashboard.
+
+---
 
 ## 📂 Project Structure
 
 ```text
-cvc_final_folder/
+Sentinel-AI/
 │
 ├── app.py
 ├── README.md
 ├── requirements.txt
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── embeddings/
+├── .gitignore
 │
 ├── scripts/
 │   ├── data_collection/
@@ -92,12 +107,17 @@ cvc_final_folder/
     └── utils/
 ```
 
+**Note:** The large CVE dataset, generated embeddings, indexes, and virtual environment are excluded from the GitHub repository.
+
+---
+
 ## ⚙️ Installation and Setup
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Sentinel-AI.git
+git clone https://github.com/vishwakarmasakshi/Sentinel-AI.git
+
 cd Sentinel-AI
 ```
 
@@ -121,13 +141,25 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. Prepare project data and indexes
+### 5. Prepare the dataset and indexes
 
-The CVE dataset and generated embedding/index files are not included in this repository because of their size.
+The CVE dataset, metadata, embeddings, FAISS index, and BM25 index are not included in the repository because of their size.
 
-Prepare the required data, metadata, FAISS index, and BM25 index before launching the application.
+Prepare the required files using the data collection, preprocessing, embedding, and indexing scripts in the `scripts/` directory.
 
-### 6. Run the application
+The application requires these files in their expected locations before it can run.
+
+### 6. Set up Llama 3.2
+
+Install Ollama and download the Llama 3.2 model:
+
+```bash
+ollama pull llama3.2
+```
+
+Ensure the Ollama service is running before using the AI Vulnerability Analyzer.
+
+### 7. Launch the application
 
 ```bash
 streamlit run app.py
@@ -135,33 +167,41 @@ streamlit run app.py
 
 The application will open in your browser.
 
+---
+
 ## 📊 Dataset
 
-The project uses CVE information from the **National Vulnerability Database (NVD)**.
+Sentinel AI uses vulnerability information from the **National Vulnerability Database (NVD)**.
 
 Official source: https://nvd.nist.gov/
 
 The project processes historical CVE records and supports fetching recent vulnerability updates through the NVD API.
 
+---
+
 ## 🎯 Project Objective
 
-The main objective of Sentinel AI is to make vulnerability research easier by combining semantic search, keyword retrieval, and AI-generated explanations.
+The main objective of Sentinel AI is to simplify cybersecurity vulnerability research and analysis.
 
-Instead of manually searching through large numbers of vulnerability reports, users can ask questions and explore relevant CVE information through a single interface.
+Traditional vulnerability research often requires users to manually search through large numbers of vulnerability reports.
 
-## 🔮 Future Improvements
+Sentinel AI provides a unified platform where users can:
+- Search for specific vulnerabilities.
+- Explore CVE records using filters.
+- Ask natural-language questions about cybersecurity vulnerabilities.
+- Retrieve relevant information through hybrid search.
+- Understand vulnerabilities through AI-generated explanations.
 
-- Improve retrieval accuracy and relevance.
-- Add more detailed vulnerability evaluation.
-- Improve source citations and evidence display.
-- Expand vulnerability analysis and reporting.
+By combining semantic retrieval, keyword-based search, and Retrieval-Augmented Generation, Sentinel AI makes vulnerability information easier to explore and understand.
+
+---
 
 ## 👩‍💻 Author
 
 **Sakshi Vishwakarma**
 
-AI and Cybersecurity Project
+AI & Cybersecurity Project
 
 ---
 
-*Sentinel AI — Making vulnerability analysis easier with AI.*
+*Sentinel AI — Intelligent Vulnerability Analysis Using AI.*
